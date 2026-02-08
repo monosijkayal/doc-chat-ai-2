@@ -14,6 +14,12 @@ while True:
     if question.lower() == "exit":
         break
 
-    answer = answer_question(llm, retriever, question)
+    result = answer_question(llm, retriever, question)
+
     print("\nAnswer:")
-    print(answer)
+    print(result["answer"])
+
+    print("\nConfidence:", result["confidence"])
+
+
+

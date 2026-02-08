@@ -2,7 +2,14 @@ from pypdf import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
+import re
 
+
+def clean_text(text: str) -> str:
+    text = re.sub(r"([a-z])([A-Z])", r"\1 \2", text)
+    text = re.sub(r"([.,:;!?])([A-Za-z])", r"\1 \2", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
 
 
 def ingest_pdf(pdf_path: str, persist_dir: str = "chroma_db"):
@@ -14,10 +21,14 @@ def ingest_pdf(pdf_path: str, persist_dir: str = "chroma_db"):
         if page_text:
             text += page_text + "\n"
 
+    # ✅ CLEAN THE TEXT HERE
+    text = clean_text(text)
+
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=100
+        chunk_size=700,
+        chunk_overlap=300
     )
+
     chunks = splitter.split_text(text)
 
     embeddings = HuggingFaceEmbeddings(
