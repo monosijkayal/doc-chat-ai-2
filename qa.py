@@ -1,6 +1,6 @@
-def answer_question(llm, retriever, question: str):
+def answer_question(llm, retriever, question: str, chat_history: list):
     """
-    Answers a question using RAG.
+    Answers a question using RAG with lightweight conversation memory.
     Returns:
     - answer
     - confidence score
@@ -44,24 +44,42 @@ def answer_question(llm, retriever, question: str):
 
     confidence = round(1 / (1 + min_score), 2)
 
+    # 🔹 Authoritative document context (MOST IMPORTANT)
     context = "\n\n".join(doc.page_content for doc in docs)
 
-    # 🔹 Prompt tuned for definition vs explanation
+    # 🔹 VERY LIGHT conversation memory (ONLY last 1 turn)
+    history_text = ""
+    if chat_history:
+        prev_q, prev_a = chat_history[-1]
+        history_text = f"""
+Previous Question:
+{prev_q}
+
+Previous Answer:
+{prev_a}
+"""
+
+    # 🔹 FINAL PROMPT (CORRECT HIERARCHY)
     prompt = f"""
 You are answering questions strictly from the given document.
 
+Document Context (AUTHORITATIVE):
+{context}
+
+Conversation Memory (REFERENCE ONLY):
+{history_text}
+
 Rules:
-- Use ONLY the information in the context below
+- Use ONLY the document context to form answers
+- Conversation memory is ONLY to understand references like "they", "this", etc.
+- Do NOT use conversation memory as a source of facts
 - If the question asks for a definition or list, answer directly and concisely
 - If the question asks "why", explain using sentences from the document
 - Do NOT use outside knowledge
 - If the answer is not supported by the document, say:
   "Answer not available in the provided document."
 
-Context:
-{context}
-
-Question:
+Current Question:
 {question}
 
 Answer:
