@@ -61,11 +61,12 @@ This design demonstrates clean separation between **core AI logic** and **applic
 
 ## ⚙️ Setup Instructions
 
+```bash
+
  1️⃣ Install Ollama (Required)
 
 Install Ollama and pull a model:
 
-```bash
 ollama run phi3:mini
 
 (You can change the model name in llm.py if needed.)
