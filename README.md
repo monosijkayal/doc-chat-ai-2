@@ -61,7 +61,7 @@ This design demonstrates clean separation between **core AI logic** and **applic
 
 ## ⚙️ Setup Instructions
 
-### 1️⃣ Install Ollama (Required)
+ 1️⃣ Install Ollama (Required)
 
 Install Ollama and pull a model:
 
