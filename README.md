@@ -1,4 +1,4 @@
-# Internship Interview – RAG Question Answering System (Python)
+# Doc-Chat-AI – RAG Question Answering System (Python)
 
 This project is a **Retrieval-Augmented Generation (RAG)** based **Question Answering system** built in **Python**.  
 It answers questions **strictly from a given PDF document** using embeddings, semantic search, and a **local LLM (Ollama)**, and returns a **confidence score** for each answer.
