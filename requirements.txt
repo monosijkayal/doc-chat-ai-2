@@ -4,4 +4,6 @@ chromadb
 sentence-transformers
 ollama
 pytest
-boto3
+fastapi
+uvicorn
+
